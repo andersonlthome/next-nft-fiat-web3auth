@@ -57,6 +57,7 @@ export function Web3Auth({ children }: Web3AuthProviderProps): JSX.Element {
   );
 
   const [toVerify, setToVerify] = useState<ToVerify>({} as ToVerify);
+  const [scopes, setScopes] = useState<string[]>([]);
 
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID_WEB3AUTH as string; // get from https://dashboard.web3auth.io
   const apiUrl =
@@ -180,9 +181,24 @@ export function Web3Auth({ children }: Web3AuthProviderProps): JSX.Element {
         Authorization: "Bearer " + idToken,
       },
       body: JSON.stringify({ appPubKey: appPubKey }),
-    }).catch((err) => {
-      console.error("error fetch", err);
-    });
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("User verified");
+          return res.json();
+        } else {
+          console.log("User verification failed");
+          return null;
+        }
+      })
+      .then((user) => {
+        // TODO: SEND TO NAVBAR TO SHOW MENU ADMIN, WHEN WITH THIS SCOPE
+        if (user) setScopes(user.scopes);
+      })
+      .catch((err) => {
+        console.error("error fetch", err);
+      });
+
 
     console.log("Logged in Successfully!");
   };
