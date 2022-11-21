@@ -1,7 +1,10 @@
 import Image, { StaticImageData } from "next/image";
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { useWeb3Auth } from "../hooks/useWeb3Auth";
-import imgCryptoPunk from "../public/assets/cryptopunk.png";
+import imgCryptoPunk1 from "../public/assets/1.png";
+import imgCryptoPunk2 from "../public/assets/2.png";
+import imgCryptoPunk3 from "../public/assets/3.png";
+import imgCryptoPunk4 from "../public/assets/4.png";
 import { NftToBuyState } from "../interfaces";
 
 function App() {
@@ -15,14 +18,33 @@ function App() {
     sendPreference,
   } = useWeb3Auth();
 
-  const allNfts: NftToBuyState[] = [
+  // the idea is get from the backend the nft to buy or direct from IPFS
+  const allNfts: NftToBuyState[] = [    
     {
-      id: 1,
-      name: "CryptoPunk",
-      image: imgCryptoPunk,
+      id: 2,
+      name: "CryptoPunk 2",
+      image: imgCryptoPunk2,
       price: 10,
       description:
-        "CryptoPunk is a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
+        "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
+      currency: "BRL",
+    },
+    {
+      id: 3,
+      name: "CryptoPunk 3",
+      image: imgCryptoPunk3,
+      price: 10,
+      description:
+        "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
+      currency: "BRL",
+    },
+    {
+      id: 4,
+      name: "CryptoPunk 4",
+      image: imgCryptoPunk4,
+      price: 10,
+      description:
+        "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
       currency: "BRL",
     },
   ];
@@ -135,17 +157,15 @@ function App() {
   };
 
   const allNftsRender = allNfts.map((nft) => (
-    <div key={nft.id} className="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+    <div key={nft.id} className="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-xl w-80 m-4">
       <div className="sm:flex sm:items-start flex-col">
         <div>
           <Image src={nft.image} alt="CryptoPunks" />
         </div>
-        <div>
-          {/* <button onClick={() => buyNft(nft)} className="card">
-          
-        </button> */}
+        <div className="flex flex-col ">
+          <span className="text-white mb-2"> {nft.name} </span>
+          <p className="text-white mb-4"> {nft.description} </p>
           <CheckoutButton nft={nft} />
-          {/* {nft.name} */}
         </div>
       </div>
     </div>
@@ -164,19 +184,16 @@ function App() {
           onClick={provider ? logout : login}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
         >
-          {provider ? 'Logout' : 'Login'}
+          {provider ? "Logout" : "Login"}
         </button>
       </nav>
+
       <div className="container">
-        <h1 className="title">
-          Buy now the best NFTs
-        </h1>
+        <h1 className="title">Buy now the best NFTs</h1>
 
-        <div className="grid">{allNftsRender}</div>
+        <div className="flex flex-row flex-wrap justify-center">{allNftsRender}</div>
 
-        <footer className="footer">
-          
-        </footer>
+        <footer className="footer"></footer>
       </div>
     </>
   );
