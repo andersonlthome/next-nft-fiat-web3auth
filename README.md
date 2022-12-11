@@ -14,4 +14,4 @@ With this marketplace, users can easily and securely purchase NFTs using their e
 - Web3Auth
 - MercadoPagoAPI
 
-See the [BACKEND](https://github.com/andersonlthome/nextjs13-index-web3)
+See the [BACKEND](https://github.com/andersonlthome/nextjs13-index-web3) for the server-side implementation.
