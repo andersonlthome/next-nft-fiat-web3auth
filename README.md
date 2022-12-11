@@ -6,7 +6,7 @@ The project is built using React and Next.js, with Tailwind CSS for styling. The
 
 With this marketplace, users can easily and securely purchase NFTs using their existing payment methods, without the need for a cryptocurrency wallet or exchange.
 
-###Tecnologies:
+### Tecnologies:
 - React
 - Typescript
 - NextJS
