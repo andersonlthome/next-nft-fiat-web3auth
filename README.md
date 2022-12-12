@@ -1,4 +1,4 @@
-## NFT Marketplace with FIAT - NextJS | Web3Auth | MercadoPagoAPI 
+## Frontend NFT Marketplace with FIAT - NextJS | Web3Auth | MercadoPagoAPI 
 
 The goal of this project is to create a marketplace that allows users to buy NFTs (non-fungible tokens) using their fiat currency, such as a credit card or pix with MercadoPago API. The marketplace utilizes web3auth for user authentication, allowing users to login with their social account or blockchain wallet.
 
