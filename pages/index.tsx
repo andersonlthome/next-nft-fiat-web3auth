@@ -3,7 +3,12 @@ import Head from "next/head";
 
 import dynamic from "next/dynamic";
 import { Web3Auth } from "../hooks/useWeb3Auth";
+import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
+/**
+ * This is the dynamic import of the App component. 
+ * It will be rendered only on the client side.
+*/
 const App = dynamic(
   () => {
     return import("./App");
@@ -11,9 +16,12 @@ const App = dynamic(
   { ssr: false }
 );
 
+// This is the chainId your dApp will work on.
+const activeChainId = ChainId.Mumbai;
+
 const Home: NextPage = () => {
   return (
-    <>
+    <ThirdwebProvider desiredChainId={activeChainId}>
       <Head>
         <title>NFT - FIAT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,7 +29,7 @@ const Home: NextPage = () => {
       <Web3Auth>
         <App />
       </Web3Auth>
-    </>
+    </ThirdwebProvider>
   );
 };
 

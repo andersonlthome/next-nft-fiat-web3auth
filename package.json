@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@thirdweb-dev/react": "^3.6.10",
+    "@thirdweb-dev/sdk": "^3.6.10",
     "@web3auth/base": "^3.0.0",
     "@web3auth/coinbase-adapter": "^3.0.4",
     "@web3auth/metamask-adapter": "^3.0.4",
@@ -19,8 +21,10 @@
     "ethers": "^5.7.2",
     "i18n": "^0.15.1",
     "next": "^12.3.1",
+    "pnpm": "^7.25.1",
     "react": "18",
     "react-dom": "18",
+    "thirdweb-react-monorepo": "github:thirdweb-dev/react",
     "web3": "^1.8.0"
   },
   "devDependencies": {

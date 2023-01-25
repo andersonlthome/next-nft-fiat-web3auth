@@ -7,6 +7,10 @@ import imgCryptoPunk3 from "../public/assets/3.png";
 import imgCryptoPunk4 from "../public/assets/4.png";
 import { NftToBuyState } from "../interfaces";
 
+import { useContract } from '@thirdweb-dev/react'
+
+import { ethers } from "ethers";
+
 function App() {
   const {
     provider,
@@ -17,6 +21,26 @@ function App() {
     getAccounts,
     sendPreference,
   } = useWeb3Auth();
+
+  const contractAddress = "0xdCF044c428145327779238617a473D1FD21738a9";
+  // const contractAbi = [
+  //   "function balanceOf(address owner) public view returns (uint256)",
+  //   "function   ];
+
+  const { contract } = useContract("0xdCF044c428145327779238617a473D1FD21738a9", "nft-drop")
+
+  useEffect(() => {
+    console.log(contract)
+    if(!contract) return
+
+    const getNfts = async () => {
+      const nfts = await contract.getAll();
+      console.log(nfts);
+    };
+
+    getNfts();
+  }, [])
+
 
   // the idea is get from the backend the nft to buy or direct from IPFS
   const allNfts: NftToBuyState[] = [    

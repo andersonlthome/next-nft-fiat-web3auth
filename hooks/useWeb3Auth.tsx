@@ -138,7 +138,7 @@ export function Web3Auth({ children }: Web3AuthProviderProps): JSX.Element {
           setProvider(web3auth.provider);
         }
       } catch (error) {
-        console.error(error);
+        console.error('Error on init Web3Auth. ', error);
       }
     };
 
