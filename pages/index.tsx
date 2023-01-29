@@ -3,6 +3,7 @@ import Head from "next/head";
 
 import dynamic from "next/dynamic";
 import { Web3Auth } from "../hooks/useWeb3Auth";
+import { ThirdwebContracts } from "../hooks/useThirdwebContracts";
 import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 /**
@@ -27,7 +28,9 @@ const Home: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Web3Auth>
-        <App />
+        <ThirdwebContracts>
+          <App />
+        </ThirdwebContracts>
       </Web3Auth>
     </ThirdwebProvider>
   );

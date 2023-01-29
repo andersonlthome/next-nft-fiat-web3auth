@@ -1,6 +1,6 @@
 import { StaticImageData } from "next/image";
 
-export interface NftToBuyState {
+export interface DropNftToBuy {
   id: number;
   name: String;
   image: StaticImageData;

@@ -25,7 +25,7 @@ import { TorusWalletAdapter } from "@web3auth/torus-evm-adapter";
 
 import { getPublicCompressed } from "@toruslabs/eccrypto";
 
-import { NftToBuyState } from "../interfaces";
+import { DropNftToBuy } from "../interfaces";
 
 interface Web3AuthContextData {
   provider: SafeEventEmitterProvider | null;
@@ -63,6 +63,8 @@ export function Web3Auth({ children }: Web3AuthProviderProps): JSX.Element {
   const apiUrl =
     (process.env.NEXT_PUBLIC_BACKEND_URL as string) ||
     "http://localhost:3003/api";
+
+    console.log('clientId',clientId)
 
   useEffect(() => {
     const init = async () => {
@@ -212,7 +214,7 @@ export function Web3Auth({ children }: Web3AuthProviderProps): JSX.Element {
     console.log(idToken);
   };
 
-  const sendPreference = async (nft: NftToBuyState) => {
+  const sendPreference = async (nft: DropNftToBuy) => {
     try {
       const result = await fetch(apiUrl + "/v1/mp/preference", {
         method: "POST",
@@ -326,6 +328,6 @@ export function Web3Auth({ children }: Web3AuthProviderProps): JSX.Element {
   );
 }
 
-export function useWeb3Auth(): any {
+export function useWeb3Auth(): Web3AuthContextData {
   return useContext(Web3AuthContext);
 }

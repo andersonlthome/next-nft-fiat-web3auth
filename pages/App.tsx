@@ -1,17 +1,15 @@
 import Image, { StaticImageData } from "next/image";
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from "react";
 import { useWeb3Auth } from "../hooks/useWeb3Auth";
+import { useThirdwebContracts } from "../hooks/useThirdwebContracts";
 import imgCryptoPunk1 from "../public/assets/1.png";
 import imgCryptoPunk2 from "../public/assets/2.png";
 import imgCryptoPunk3 from "../public/assets/3.png";
 import imgCryptoPunk4 from "../public/assets/4.png";
-import { NftToBuyState } from "../interfaces";
+import { DropNftToBuy } from "../interfaces";
 
-import { useContract } from '@thirdweb-dev/react'
 
-import { ethers } from "ethers";
-
-function App() {
+function App(): JSX.Element {
   const {
     provider,
     login,
@@ -21,57 +19,79 @@ function App() {
     getAccounts,
     sendPreference,
   } = useWeb3Auth();
+  const { nftMktplaceContract, nftDropContract } = useThirdwebContracts();
 
-  const contractAddress = "0xdCF044c428145327779238617a473D1FD21738a9";
-  // const contractAbi = [
-  //   "function balanceOf(address owner) public view returns (uint256)",
-  //   "function   ];
+  const [dropNfts, setDropNfts] = useState<DropNftToBuy[]>([] as DropNftToBuy[]);
 
-  const { contract } = useContract("0xdCF044c428145327779238617a473D1FD21738a9", "nft-drop")
-
-  useEffect(() => {
-    console.log(contract)
-    if(!contract) return
-
+  useEffect(() => {    
+    if(!nftMktplaceContract) return
     const getNfts = async () => {
-      const nfts = await contract.getAll();
-      console.log(nfts);
+      const nfts = await nftMktplaceContract.getAll();
+      const listing = await nftMktplaceContract.getAllListings()
+      console.log('NFTS',nfts);
+      console.log('listing',listing);
     };
 
     getNfts();
-  }, [])
+  }, [nftMktplaceContract])
+
+  useEffect(() => { 
+    console.log('nftDropContract',nftDropContract);
+
+    if(!nftDropContract) return
+    const getNfts = async () => {
+      const nfts = await nftDropContract.getAll();
+      console.log('NFTS nftDropContract',nfts);
+      let dropNftsAux: DropNftToBuy[] = []
+      nfts.forEach((nft, index) => {
+        let n: DropNftToBuy = {
+          id: index,
+          name: nft.metadata.name as string,
+          image: nft.metadata.image as unknown as StaticImageData,
+          description: nft.metadata.description as string,
+          currency: "BRL",
+          price: 10,
+        }
+        dropNftsAux.push(n);
+      });
+
+      setDropNfts(dropNftsAux);
+    };
+
+    getNfts();
+  }, [nftDropContract])
 
 
   // the idea is get from the backend the nft to buy or direct from IPFS
-  const allNfts: NftToBuyState[] = [    
-    {
-      id: 2,
-      name: "CryptoPunk 2",
-      image: imgCryptoPunk2,
-      price: 10,
-      description:
-        "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
-      currency: "BRL",
-    },
-    {
-      id: 3,
-      name: "CryptoPunk 3",
-      image: imgCryptoPunk3,
-      price: 10,
-      description:
-        "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
-      currency: "BRL",
-    },
-    {
-      id: 4,
-      name: "CryptoPunk 4",
-      image: imgCryptoPunk4,
-      price: 10,
-      description:
-        "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
-      currency: "BRL",
-    },
-  ];
+  // const dropNfts: DropNftToBuy[] = [    
+  //   {
+  //     id: 2,
+  //     name: "CryptoPunk 2",
+  //     image: imgCryptoPunk2,
+  //     price: 10,
+  //     description:
+  //       "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
+  //     currency: "BRL",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "CryptoPunk 3",
+  //     image: imgCryptoPunk3,
+  //     price: 10,
+  //     description:
+  //       "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
+  //     currency: "BRL",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "CryptoPunk 4",
+  //     image: imgCryptoPunk4,
+  //     price: 10,
+  //     description:
+  //       "Is one of a collection of 10,000 unique characters with proof of ownership stored on the Ethereum blockchain.",
+  //     currency: "BRL",
+  //   },
+  // ];
 
   const loggedInView = (
     <>
@@ -155,7 +175,7 @@ function App() {
     }
   };
 
-  const CheckoutButton: React.FC<{ nft: NftToBuyState }> = ({ nft }) => {
+  const CheckoutButton: React.FC<{ nft: DropNftToBuy }> = ({ nft }) => {
     const tryToBuy = async () => {
       let { preferenceId } = await sendPreference(nft);
 
@@ -180,21 +200,25 @@ function App() {
     );
   };
 
-  const allNftsRender = allNfts.map((nft) => (
-    <div key={nft.id} className="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-xl w-80 m-4">
-      <div className="sm:flex sm:items-start flex-col">
-        <div>
-          <Image src={nft.image} alt="CryptoPunks" />
-        </div>
-        <div className="flex flex-col ">
-          <span className="text-white mb-2"> {nft.name} </span>
-          <p className="text-white mb-4"> {nft.description} </p>
-          <CheckoutButton nft={nft} />
+  const dropNftsRender = dropNfts.map((nft) => {
+      console.log('nft.image', nft.image)
+      return(
+      <div key={nft.id} className="bg-black px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-xl w-80 m-4">
+        <div className="sm:flex  flex-col">
+          <div className="flex flex-col ">
+            <Image src={nft.image} height="280px" width="220px" alt="CryptoPunks" />
+          </div>
+          <div className="flex flex-col sm:items-start">
+            <span className="text-white my-2 font-bold"> {nft.name} </span>
+            <p className="text-white mb-4"> {nft.description} </p>
+            <CheckoutButton nft={nft} />
+          </div>
         </div>
       </div>
-    </div>
-  ));
+    )
+  });
 
+  console.log('dropNfts', dropNfts)
   return (
     <>
       <nav className="flex items-center justify-between flex-row bg-gray-800 p-6">
@@ -215,7 +239,9 @@ function App() {
       <div className="container">
         <h1 className="title">Buy now the best NFTs</h1>
 
-        <div className="flex flex-row flex-wrap justify-center">{allNftsRender}</div>
+        <div className="flex flex-row flex-wrap justify-center">
+          {dropNftsRender}
+        </div>
 
         <footer className="footer"></footer>
       </div>
